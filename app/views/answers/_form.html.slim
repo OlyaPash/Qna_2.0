@@ -1,5 +1,6 @@
 = render 'shared/errors', resource: @answer
 
+- if current_user.present?
 = form_for [@question, @answer] do |f|
   = f.label :body
   = f.text_area :body
