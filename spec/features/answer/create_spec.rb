@@ -16,15 +16,16 @@ feature 'User can write the answer on the question page', %{
       click_on question.title
     end
 
-    scenario 'write an answer' do
+    scenario 'write an answer', js: true do
       fill_in 'Body', with: 'Text answer'
       click_on 'Create answer'
 
-      expect(page).to have_content 'Your answer successfully created.'
-      expect(page).to have_content 'Text answer'
+      within '.answers' do
+        expect(page).to have_content 'Text answer'
+      end
     end
 
-    scenario 'write an answer with errors' do
+    scenario 'write an answer with errors', js: true do
       click_on 'Create answer'
 
       expect(page).to have_content "Body can't be blank"
