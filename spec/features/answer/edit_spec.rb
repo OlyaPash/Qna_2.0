@@ -48,7 +48,7 @@ feature 'User can edit his answer', %{
       end
     end
 
-    scenario "tries to edit other user's answer",js: true do
+    scenario "tries to edit other user's answer", js: true do
       sign_in(other_user)
       visit question_path(question)
 

@@ -21,3 +21,4 @@ require("turbolinks").start()
 require("@rails/activestorage").start()
 
 import "../utilities/answers"
+import "../utilities/questions"

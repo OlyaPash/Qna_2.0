@@ -90,6 +90,32 @@ RSpec.describe AnswersController, type: :controller do
         expect(response).to render_template :update
       end
     end
+
+    context 'user author answer' do
+      it 'changes answer attributes' do
+        patch :update, params: { id: answer, answer: { body: 'new body' }, format: :js }
+        answer.reload
+        
+        expect(assigns(:answer)).to eq answer
+      end
+
+      it 'renders update view' do
+        patch :update, params: { id: answer, answer: { body: 'new body' }, format: :js }
+        expect(response).to render_template :update
+      end
+    end
+
+    context 'user not author answer' do
+      let(:other_user) { create(:user) }
+      let(:other_answer) { create(:answer, question: question, user_id: other_user.id) }
+
+      it 'does not change question' do
+        patch :update, params: { id: other_answer, answer: { body: 'new body' }, format: :js }
+        answer.reload
+
+        expect(assigns(:other_answer)).to_not eq 'new body'
+      end
+    end
   end
 
   describe 'DELETE #destroy' do
