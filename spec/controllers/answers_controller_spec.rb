@@ -118,6 +118,37 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
+  describe 'PATCH #select_best' do
+    let!(:answer) { create(:answer, question: question, user_id: user.id) }
+
+    context 'user is author' do
+      before { login(user) }
+
+      it 'chooses the answer as the best' do
+        patch :select_best, params: { id: answer}, format: :js
+        answer.reload
+
+        expect(answer).to be_best
+      end
+
+      it 'renders select_best' do
+        patch :select_best, params: { id: answer, answer: { best: true } }, format: :js
+        expect(response).to render_template :select_best
+      end
+    end
+
+    context 'user is not author' do
+      let(:other_user) { create(:user) }
+
+      it 'сan not choose best' do
+        login(other_user)
+        patch :select_best, params: { id: answer}, format: :js
+
+        expect(answer).to_not be_best
+      end
+    end
+  end
+
   describe 'DELETE #destroy' do
     context 'User is author' do
       before { login(user) }

@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
   before_action :find_question, only: %i[index new show create]
-  before_action :load_answer, only: %i[show destroy update]
+  before_action :load_answer, only: %i[show destroy update select_best]
 
   def index
     @answers = @question.answers
@@ -24,6 +24,11 @@ class AnswersController < ApplicationController
       @answer.update(answer_params)
       @question = @answer.question
     end
+  end
+
+  def select_best
+    @question = @answer.question
+    @answer.mark_as_best if current_user.author?(@answer)
   end
 
   def destroy
