@@ -11,8 +11,8 @@ feature 'User can choose the best answer on the question page', %{
   given!(:question) { create(:question, user_id: user.id) }
   given!(:answer) { create(:answer, question_id: question.id, user_id: user.id) }
 
-  describe 'Authenticated user' do
-    scenario 'author select the best answer', js: true do
+  describe 'Authenticated user', js: true do
+    scenario 'author select the best answer' do
       sign_in(user)
       visit question_path(question)
       click_on 'Make answer best'
@@ -22,7 +22,7 @@ feature 'User can choose the best answer on the question page', %{
       end
     end
 
-    scenario 'no author tries select the best answer', js: true do
+    scenario 'no author tries select the best answer' do
       sign_in(no_author)
       visit question_path(question)
 

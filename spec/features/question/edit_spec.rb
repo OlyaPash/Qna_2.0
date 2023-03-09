@@ -10,8 +10,8 @@ feature 'User can edit their questions', %{
   given!(:user_not_author) { create(:user) }
   given!(:question) { create(:question, user: user) }
 
-  describe 'Authenticated user' do
-    scenario 'edits their questions', js: true do
+  describe 'Authenticated user', js: true do
+    scenario 'edits their questions' do
       sign_in(user)
       visit question_path(question)
       click_on 'Edit question'
@@ -26,7 +26,7 @@ feature 'User can edit their questions', %{
       end
     end
 
-    scenario 'edited his question with errors', js: true do
+    scenario 'edited his question with errors' do
       sign_in(user)
       visit question_path(question)
       click_on 'Edit question'
@@ -41,7 +41,7 @@ feature 'User can edit their questions', %{
       end
     end
 
-    scenario "tries to edit other user's question", js: true do
+    scenario "tries to edit other user's question" do
       sign_in(user_not_author)
       visit question_path(question)
       
