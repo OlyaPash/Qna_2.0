@@ -9,7 +9,7 @@ feature 'User can write the answer on the question page', %{
   given(:user) { create(:user) }
   given!(:question) { create(:question, user: user) }
 
-  describe 'Authenticated user' do
+  describe 'Authenticated user', js: true do
     background do
       sign_in(user)
       visit questions_path
@@ -20,8 +20,9 @@ feature 'User can write the answer on the question page', %{
       fill_in 'Body', with: 'Text answer'
       click_on 'Create answer'
 
-      expect(page).to have_content 'Your answer successfully created.'
-      expect(page).to have_content 'Text answer'
+      within '.answers' do
+        expect(page).to have_content 'Text answer'
+      end
     end
 
     scenario 'write an answer with errors' do
@@ -30,6 +31,7 @@ feature 'User can write the answer on the question page', %{
       expect(page).to have_content "Body can't be blank"
     end
   end
+
   scenario 'An unauthenticated user cannot create a answer' do
     visit question_path(question)
     fill_in 'Body', with: 'Text answer'

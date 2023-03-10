@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
   before_action :find_question, only: %i[index new show create]
-  before_action :load_answer, only: %i[show destroy]
+  before_action :load_answer, only: %i[show destroy update select_best]
 
   def index
     @answers = @question.answers
@@ -14,23 +14,28 @@ class AnswersController < ApplicationController
   def show; end
 
   def create
-    @answer = @question.answers.new(answer_params)
+    @answer = @question.answers.create(answer_params)
     @answer.user = current_user
+    @answer.save
+  end
 
-    if @answer.save
-      redirect_to @question, notice: 'Your answer successfully created.'
-    else
-      render 'questions/show'
+  def update
+    if current_user.author?(@answer)
+      @answer.update(answer_params)
+      @question = @answer.question
     end
+  end
+
+  def select_best
+    @question = @answer.question
+    @answer.mark_as_best if current_user.author?(@answer)
   end
 
   def destroy
     if current_user.author?(@answer)
       @answer.destroy
-      redirect_to question_path(@answer.question), notice: 'Your answer successfully delete.'
-    else
-      redirect_to @answer
     end
+    @question = @answer.question
   end
 
   private

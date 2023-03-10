@@ -11,15 +11,15 @@ feature 'User can only delete his answer', %{
   given!(:question) { create(:question, user_id: user.id) }
   given!(:answer) { create(:answer, question_id: question.id, user_id: user.id) }
 
-  scenario 'Authenticated user delete his answer' do
+  scenario 'Authenticated user delete his answer', js: true do
     sign_in(user)
     visit question_path(question)
     click_on 'Delete answer'
 
-    expect(page).to have_content 'Your answer successfully delete.'
+    expect(page).to_not have_content answer.body
   end
 
-  scenario 'Authenticated user is trying to delete a response that is not their own' do
+  scenario 'Authenticated user is trying to delete a response that is not their own', js: true do
     sign_in(user_not_author)
     visit question_path(question)
 

@@ -1,0 +1,18 @@
+- if answer.persisted?
+  div id="answer-#{answer.id}"
+    - if answer.best
+      b Best answer
+
+    p
+      = answer.body
+
+    - if user_signed_in? && current_user&.author?(answer)
+      p= link_to 'Delete answer', answer, remote: true, method: :delete
+      p= link_to 'Edit answer', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
+      p= link_to 'Make answer best', select_best_answer_path(answer), method: :patch, remote: true
+      p= form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" }, local: false do |f|
+        p
+          = f.label :body
+          = f.text_area :body
+        p
+          = f.submit 'Save'
