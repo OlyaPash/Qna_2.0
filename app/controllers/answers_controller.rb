@@ -22,8 +22,9 @@ class AnswersController < ApplicationController
   def update
     if current_user.author?(@answer)
       @answer.update(answer_params)
-      @question = @answer.question
     end
+
+    @question = @answer.question
   end
 
   def select_best
