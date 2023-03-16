@@ -10,9 +10,9 @@ yandex:
   service: S3
   access_key_id: <%= ENV.fetch('YANDEX_ACCESS_KEY_ID') %>
   secret_access_key: <%= ENV.fetch('YANDEX_SECRET_ACCESS_KEY') %>
-  bucket: files-qna
-  region: ru-central1
-  endpoint: 'https://storage.yandexcloud.net'
+  bucket: <%= ENV.fetch('BUCKET') %>
+  region: <%= ENV.fetch('REGION') %>
+  endpoint: <%= ENV.fetch('ENDPOINT') %>
   force_path_style: true
 
 # Remember not to checkin your GCS keyfile to a repository
