@@ -5,6 +5,12 @@
 
     p
       = answer.body
+      - if answer.files.attached?
+        - answer.files.each do |file|
+          div class = "file-#{file.id}"
+            p= link_to file.filename.to_s, url_for(file)
+            - if current_user.author?(@question)
+              p= link_to "Delete file #{file.filename}", attachment_path(file.id), method: :delete, remote: true
 
     - if user_signed_in? && current_user&.author?(answer)
       p= link_to 'Delete answer', answer, remote: true, method: :delete
@@ -14,5 +20,8 @@
         p
           = f.label :body
           = f.text_area :body
+        p
+          = f.label :files
+          = f.file_field :files, multiple: true, direct_upload: true
         p
           = f.submit 'Save'

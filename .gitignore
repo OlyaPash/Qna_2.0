@@ -29,6 +29,7 @@
 /config/master.key
 /config/database.yml
 /.vscode
+.env
 
 /public/packs
 /public/packs-test

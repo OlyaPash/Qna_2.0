@@ -16,6 +16,9 @@ h2 Answers
     = f.label :body
     = f.text_area :body
   p
+    = f.label :files
+    = f.file_field :files, multiple: true, direct_upload: true
+  p
     = f.submit 'Create answer'
 
 p= link_to 'Back', questions_path

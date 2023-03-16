@@ -1,7 +1,8 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
   before_action :find_question, only: %i[index new show create]
-  before_action :load_answer, only: %i[show destroy update select_best]
+  before_action :find_answer, only: %i[show destroy update select_best]
+  before_action :returns_associated, only: %i[update select_best destroy]
 
   def index
     @answers = @question.answers
@@ -22,12 +23,10 @@ class AnswersController < ApplicationController
   def update
     if current_user.author?(@answer)
       @answer.update(answer_params)
-      @question = @answer.question
     end
   end
 
   def select_best
-    @question = @answer.question
     @answer.mark_as_best if current_user.author?(@answer)
   end
 
@@ -35,7 +34,6 @@ class AnswersController < ApplicationController
     if current_user.author?(@answer)
       @answer.destroy
     end
-    @question = @answer.question
   end
 
   private
@@ -44,11 +42,15 @@ class AnswersController < ApplicationController
     @question = Question.find(params[:question_id])
   end
 
-  def load_answer
-    @answer = Answer.find(params[:id])
+  def find_answer
+    @answer = Answer.with_attached_files.find(params[:id])
   end
 
   def answer_params
-    params.require(:answer).permit(:body)
+    params.require(:answer).permit(:body, files: [])
+  end
+
+  def returns_associated
+    @question = @answer.question
   end
 end
