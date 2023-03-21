@@ -9,19 +9,34 @@ feature 'User can add links to question', %{
   given(:user) { create(:user) }
   given(:gist_url) { 'https://gist.github.com/OlyaPash/a1998a9c90a501eb807dbae01d60ba32' }
 
-  scenario 'User adds links' do
-    sign_in(user)
-    visit new_question_path
+  describe 'User add' do
+    background do
+      sign_in(user)
+      visit new_question_path
+    end
 
-    fill_in 'Title', with: 'Test question'
-    fill_in 'Body', with: 'Text text text'
+    scenario 'correct links' do
+      fill_in 'Title', with: 'Test question'
+      fill_in 'Body', with: 'Text text text'
 
-    fill_in 'Link name', with: 'My gist'
-    fill_in 'Url', with: gist_url
+      fill_in 'Link name', with: 'My gist'
+      fill_in 'Url', with: gist_url
 
-    click_on 'Ask'
+      click_on 'Ask'
 
-    expect(page).to have_link 'My gist', href: gist_url
+      expect(page).to have_link 'My gist', href: gist_url
+    end
+
+    scenario 'invalid links' do
+      fill_in 'Title', with: 'Test question'
+      fill_in 'Body', with: 'Text text text'
+
+      fill_in 'Link name', with: 'My gist'
+      fill_in 'Url', with: 'chtoto'
+
+      click_on 'Ask'
+
+      expect(page).to have_content 'Links url are not valid'
+    end
   end
-
 end
