@@ -18,7 +18,7 @@
               p= link_to "Delete link", link_path(link.id), method: :delete, remote: true
 
   - if user_signed_in? && current_user&.author?(@question)
-    td= link_to 'Edit question', '#', class: 'edit-question-link', data: { question_id: question.id }
+    td= link_to 'Edit question ', '#', class: 'edit-question-link', data: { question_id: question.id }
     td |
     td = form_with model: @question, class: 'hidden', html: { id: "edit-question-#{question.id}" }, local: false do |f|
       p
@@ -30,6 +30,13 @@
       p
         = f.label :files
         = f.file_field :files, multiple: true, direct_upload: true
+
+      p Links:
+      p
+        = f.fields_for :links do |l|
+          = render 'links/link_fields', f: l
+        .links
+          = link_to_add_association 'Add link', f, :links, partial: 'links/link_fields'
       p
         = f.submit 'Save'
 

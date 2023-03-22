@@ -11,6 +11,7 @@ h2 Answers
   = render 'shared/errors', resource: @answer
 
 - if current_user.present?
+h3 New Answer
 = form_with model: [@question, @answer], class: 'new-answer', local: false do |f|
   p
     = f.label :body
