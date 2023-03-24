@@ -1,12 +1,20 @@
 .question
   div id="question-#{question.id}"
     h2= @question.title
+    
+    - if @question.badge.present?
+      p Badge:
+      p
+        = @question.badge.name
+      p 
+        = image_tag @question.badge.image, size: '70x70' if @question.badge.image.attached?
+
     p= @question.body
     - if @question.files.attached?
       - @question.files.each do |file|
         div class = "file-#{file.id}"
           p= link_to file.filename.to_s, url_for(file)
-          - if current_user.author?(@question)
+          - if current_user&.author?(@question)
             p= link_to "Delete file #{file.filename}", attachment_path(file.id), method: :delete, remote: true
     .links
       - if @question.links.present?

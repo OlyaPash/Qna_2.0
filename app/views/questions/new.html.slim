@@ -18,6 +18,16 @@ h3 New Question
       = render 'links/link_fields', f: l
     .links
       = link_to_add_association 'Add link', f, :links, partial: 'links/link_fields'
+
+  p Badge:
+  p
+    = f.fields_for :badge do |i|
+      p
+        = i.label :name, 'Badge name'
+        = i.text_field :name
+      p
+        = i.label :image
+        = i.file_field :image
   p
     = f.submit 'Ask'
 
