@@ -13,7 +13,7 @@ class Answer < ApplicationRecord
 
   def mark_as_best
     transaction do
-			self.class.where(question_id: self.question_id).update_all(best: false)
+			Answer.where(question_id: question_id).update_all(best: false)
 			update!(best: true)
       question.badge&.update!(user: user)
 		end
