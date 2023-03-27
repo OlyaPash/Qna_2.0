@@ -15,6 +15,7 @@
 
 require("channels")
 require("jquery")
+require("@nathanvda/cocoon")
 require("bootstrap")
 require("@rails/ujs").start()
 require("turbolinks").start()

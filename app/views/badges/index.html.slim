@@ -1,0 +1,5 @@
+h1= 'My Awards'
+- @badges.each do |badge|
+  p= badge.question.title
+  p= badge.name
+  = image_tag badge.image, size: '70x70' if badge.image.attached?

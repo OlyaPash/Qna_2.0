@@ -1,27 +1,55 @@
 .question
-  h2= @question.title
-  p= @question.body
-  - if @question.files.attached?
-    - @question.files.each do |file|
-      div class = "file-#{file.id}"
-        p= link_to file.filename.to_s, url_for(file)
-        - if current_user.author?(@question)
-          p= link_to "Delete file #{file.filename}", attachment_path(file.id), method: :delete, remote: true
-   
-  - if user_signed_in? && current_user&.author?(@question)
-    td= link_to 'Edit question', '#', class: 'edit-question-link', data: { question_id: question.id }
-    td |
-    td = form_with model: @question, class: 'hidden', html: { id: "edit-question-#{question.id}" }, local: false do |f|
+  div id="question-#{question.id}"
+    h2= @question.title
+    
+    - if @question.badge.present?
+      p Badge:
       p
-        = f.label :title
-        = f.text_field :title
-      p
-        = f.label :body
-        = f.text_area :body
-      p
-        = f.label :files
-        = f.file_field :files, multiple: true, direct_upload: true
-      p
-        = f.submit 'Save'
+        = @question.badge.name
+      p 
+        = image_tag @question.badge.image, size: '70x70' if @question.badge.image.attached?
 
-    td= link_to 'Delete question', question_path(@question), method: :delete
+    p= @question.body
+    - if @question.files.attached?
+      - @question.files.each do |file|
+        div class = "file-#{file.id}"
+          p= link_to file.filename.to_s, url_for(file)
+          - if current_user&.author?(@question)
+            p= link_to "Delete file #{file.filename}", attachment_path(file.id), method: :delete, remote: true
+    .links
+      - if @question.links.present?
+        p Links:
+        ul
+          - @question.links.each do |link|
+            div class = "link-#{link.id}"
+              - if link.gist?
+                .gist data-src="#{link.url+ ".json"}"
+              else
+                li= link_to link.name, link.url
+              - if current_user.author?(@question)
+                p= link_to "Delete link", link_path(link.id), method: :delete, remote: true
+
+    - if user_signed_in? && current_user&.author?(@question)
+      td= link_to 'Edit question ', '#', class: 'edit-question-link', data: { question_id: question.id }
+      td |
+      td = form_with model: @question, class: 'hidden', html: { id: "edit-question-#{question.id}" }, local: false do |f|
+        p
+          = f.label :title
+          = f.text_field :title
+        p
+          = f.label :body
+          = f.text_area :body
+        p
+          = f.label :files
+          = f.file_field :files, multiple: true, direct_upload: true
+
+        p Links:
+        p
+          = f.fields_for :links do |l|
+            = render 'links/link_fields', f: l
+          .links
+            = link_to_add_association 'Add link', f, :links, partial: 'links/link_fields'
+        p
+          = f.submit 'Save'
+
+      td= link_to 'Delete question', question_path(@question), method: :delete

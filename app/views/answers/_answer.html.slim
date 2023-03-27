@@ -9,9 +9,21 @@
         - answer.files.each do |file|
           div class = "file-#{file.id}"
             p= link_to file.filename.to_s, url_for(file)
-            - if current_user.author?(@question)
+            - if current_user.author?(answer)
               p= link_to "Delete file #{file.filename}", attachment_path(file.id), method: :delete, remote: true
 
+    .links
+    - if answer.links.present?
+      p Links:
+      ul
+        - answer.links.each do |link|
+          div class = "link-#{link.id}"
+            - if link.gist?
+              .gist data-src="#{link.url+ ".json"}"
+            else
+              li= link_to link.name, link.url
+            - if current_user&.author?(link.linkable)
+              p= link_to "Delete link", link_path(link.id), method: :delete, remote: true
     - if user_signed_in? && current_user&.author?(answer)
       p= link_to 'Delete answer', answer, remote: true, method: :delete
       p= link_to 'Edit answer', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
@@ -23,5 +35,12 @@
         p
           = f.label :files
           = f.file_field :files, multiple: true, direct_upload: true
+          
+        p Links:
+        p
+          = f.fields_for :links do |l|
+            = render 'links/link_fields', f: l
+          .links
+            = link_to_add_association 'Add link', f, :links, partial: 'links/link_fields'
         p
           = f.submit 'Save'

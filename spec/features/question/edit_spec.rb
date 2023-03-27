@@ -9,6 +9,7 @@ feature 'User can edit their questions', %{
   given!(:user) { create(:user) }
   given!(:user_not_author) { create(:user) }
   given!(:question) { create(:question, user: user) }
+  given(:gist_url) { 'https://gist.github.com/OlyaPash/a1998a9c90a501eb807dbae01d60ba32' }
 
   describe 'Authenticated user', js: true do
     scenario 'edits their questions' do
@@ -61,6 +62,24 @@ feature 'User can edit their questions', %{
 
         expect(page).to have_link 'rails_helper.rb'
         expect(page).to have_link 'spec_helper.rb'
+      end
+    end
+
+    scenario 'edit a question with add links' do
+      sign_in(user)
+      visit question_path(question)
+      click_on 'Edit question'
+
+      within '.question' do
+        fill_in 'Body', with: 'edited'
+        click_on 'Add link'
+        
+        fill_in 'Link name', with: 'My gist'
+        fill_in 'Url', with: gist_url
+
+        click_on 'Save'
+
+        expect(page).to have_link 'My gist', href: gist_url
       end
     end
   end
