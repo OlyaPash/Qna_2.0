@@ -23,3 +23,4 @@ require("@rails/activestorage").start()
 
 import "../utilities/answers"
 import "../utilities/questions"
+import "../utilities/vote"
