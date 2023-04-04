@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :answer do
     body { "MyTextAnswer" }
-    question { nil }
+    question
     user
 
     trait :invalid do
