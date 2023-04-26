@@ -1,6 +1,8 @@
 .question
   div id="question-#{question.id}"
     h2= @question.title
+
+    = render 'shared/vote', resource: question
     
     - if @question.badge.present?
       p Badge:
@@ -53,3 +55,8 @@
           = f.submit 'Save'
 
       td= link_to 'Delete question', question_path(@question), method: :delete
+
+    h6 Comments:
+
+    = render 'comments/form', commentable: question
+      

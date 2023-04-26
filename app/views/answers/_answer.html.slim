@@ -3,18 +3,21 @@
     - if answer.best
       b Best answer
 
-    p
-      = answer.body
+    p= answer.body
 
-      p Rating:
-      = render 'shared/vote', resource: answer
+    p Rating:
+    = render 'shared/vote', resource: answer, current_user: current_user
 
-      - if answer.files.attached?
-        - answer.files.each do |file|
-          div class = "file-#{file.id}"
-            p= link_to file.filename.to_s, url_for(file)
-            - if current_user.author?(answer)
-              p= link_to "Delete file #{file.filename}", attachment_path(file.id), method: :delete, remote: true
+    - if answer.files.attached?
+      - answer.files.each do |file|
+        div class = "file-#{file.id}"
+          p= link_to file.filename.to_s, url_for(file)
+          - if current_user.author?(answer)
+            p= link_to "Delete file #{file.filename}", attachment_path(file.id), method: :delete, remote: true
+    
+    h6 Comments:
+
+    = render 'comments/form', commentable: answer
 
     .links
     - if answer.links.present?

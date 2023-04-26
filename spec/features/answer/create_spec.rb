@@ -17,8 +17,10 @@ feature 'User can write the answer on the question page', %{
     end
 
     scenario 'write an answer' do
-      fill_in 'Body', with: 'Text answer'
-      click_on 'Create answer'
+      within '.new-answer' do
+        fill_in 'Body', with: 'Text answer'
+        click_on 'Create answer'
+      end
 
       within '.answers' do
         expect(page).to have_content 'Text answer'
@@ -32,13 +34,43 @@ feature 'User can write the answer on the question page', %{
     end
 
     scenario 'write answer with attached file' do
-      fill_in 'Body', with: 'Text answer'
+      within '.new-answer' do
+        fill_in 'Body', with: 'Text answer'
 
-      attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
-      click_on 'Create answer'
+        attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+        click_on 'Create answer'
+      end
 
       expect(page).to have_link 'rails_helper.rb'
       expect(page).to have_link 'spec_helper.rb'
+    end
+  end
+
+  context 'mulitple sessions', js: true do
+    scenario "answer appears on another user's page" do
+      Capybara.using_session('user') do
+        sign_in(user)
+        visit question_path(question)
+      end
+
+      Capybara.using_session('guest') do
+        visit question_path(question)
+      end
+
+      Capybara.using_session('user') do
+        within '.new-answer' do
+          fill_in 'Body', with: 'Text answer'
+          click_on 'Create answer'
+        end
+        
+        within '.answers' do
+          expect(page).to have_content 'Text answer'
+        end
+      end
+
+      Capybara.using_session('guest') do
+        expect(page).to have_content 'Text answer'
+      end
     end
   end
 

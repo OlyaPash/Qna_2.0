@@ -29,13 +29,14 @@ gem 'image_processing', '~> 1.2'
 gem 'bootsnap', '>= 1.4.4', require: false
 
 gem 'rubocop', require: false
-
+gem 'bootstrap'
 gem 'slim-rails', '~> 3.6'
 gem 'devise'
 gem 'jquery-rails'
 gem 'aws-sdk-s3', require: false
 gem 'dotenv-rails'
 gem "cocoon"
+gem 'gon'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

@@ -1,0 +1,4 @@
+<% if @comment.persisted? %>
+  $('#answer-comment-<%= @commentable.id %>').append('<%= j render @comment %>');
+  $('.new-comment #answer-comment-body" %>').val('');
+<% end %>

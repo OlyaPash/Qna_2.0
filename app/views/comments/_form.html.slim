@@ -1,0 +1,10 @@
+div id="#{commentable.class.name.downcase}-comment-#{commentable.id}"
+  - commentable.comments.each do |comment|
+    p= comment.body
+
+.new-comment-form
+  h5 New comment:
+  = form_with scope: :comment, class: 'new-comment', url: polymorphic_path(commentable, action: :comment), local: false do |f|
+    = f.label :body, 'Your comment'
+    = f.text_area :body, class: 'form-control mt-2', id: "#{commentable.class.name.downcase}-comment-body"
+    p= f.submit 'Add comment', class: 'btn btn-primary mt-2'
