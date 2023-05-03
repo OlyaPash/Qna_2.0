@@ -1,0 +1,28 @@
+- if answer.persisted?
+  div id="answer-#{answer.id}"
+    - if answer.best
+
+    p
+      = answer.body
+
+    p Rating:
+    =answer.rating
+
+    - if answer.files.attached?
+      - answer.files.each do |file|
+        div class = "file-#{file.id}"
+          p= link_to file.filename.to_s, url_for(file)
+
+    h6 Comments:
+    = render 'comments/form', commentable: answer
+
+    .links
+      - if answer.links.present?
+        p Links:
+        ul
+          - answer.links.each do |link|
+            div class = "link-#{link.id}"
+              - if link.gist?
+                .gist data-src="#{link.url+ ".json"}"
+              else
+                li= link_to link.name, link.url

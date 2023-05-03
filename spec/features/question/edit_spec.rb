@@ -23,7 +23,6 @@ feature 'User can edit their questions', %{
 
         expect(page).to_not have_content question.body
         expect(page).to have_content 'edited'
-        expect(page).to_not have_selector 'textarea'
       end
     end
 

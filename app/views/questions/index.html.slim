@@ -1,7 +1,8 @@
-- @questions.each do |question|
-  p
-    h3= link_to question.title, question_path(question)
-    p Rating:
-    = render 'shared/vote', resource: question
-br
-p= link_to 'Ask question', new_question_path
+.questions
+  br
+  p= link_to 'Ask question', new_question_path
+  
+  - @questions.each do |question|
+    p
+      h3= link_to question.title, question_path(question)
+      = "Rating: #{question.rating}"

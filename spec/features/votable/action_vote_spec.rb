@@ -15,51 +15,63 @@ feature 'User can vote up/down for question, answer', %{
     background { sign_in(no_author) }
 
     scenario 'can vote for favorite question' do
-      visit questions_path
+      visit question_path(question)
 
-      click_on 'Like'
-      expect(page).to have_content 1
+      within '.question' do
+        click_on 'Like'
+        expect(page).to have_content 1
+      end
     end
 
     scenario 'can cancel vote for question' do
-      visit questions_path
+      visit question_path(question)
+      
+      within '.question' do
+        click_on 'Like'
+        expect(page).to have_content 1
 
-      click_on 'Like'
-      expect(page).to have_content 1
-
-      click_on 'Cancel'
-      expect(page).to have_content 0
+        click_on 'Cancel'
+        expect(page).to have_content 0
+      end
     end
 
     scenario 'can tap dislike for question' do
-      visit questions_path
+      visit question_path(question)
 
-      click_on 'Dislike'
-      expect(page).to have_content -1
+      within '.question' do
+        click_on 'Dislike'
+        expect(page).to have_content -1
+      end
     end
 
     scenario 'can vote for favorite answer' do
       visit question_path(question)
-
-      click_on 'Like'
-      expect(page).to have_content 1
+      
+      within '.answers' do
+        click_on 'Like'
+        expect(page).to have_content 1
+      end
     end
 
     scenario 'can tap dislike for answer' do
       visit question_path(question)
 
-      click_on 'Dislike'
-      expect(page).to have_content -1
+      within '.answers' do
+        click_on 'Dislike'
+        expect(page).to have_content -1
+      end
     end
 
     scenario 'can cancel vote for answer' do
       visit question_path(question)
 
-      click_on 'Dislike'
-      expect(page).to have_content -1
+      within '.answers' do
+        click_on 'Dislike'
+        expect(page).to have_content -1
 
-      click_on 'Cancel'
-      expect(page).to have_content 0
+        click_on 'Cancel'
+        expect(page).to have_content 0
+      end
     end
   end
 

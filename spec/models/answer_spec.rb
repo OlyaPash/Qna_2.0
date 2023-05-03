@@ -34,4 +34,5 @@ RSpec.describe Answer, type: :model do
   end
 
   it_behaves_like 'votable'
+  it_behaves_like 'commentable'
 end

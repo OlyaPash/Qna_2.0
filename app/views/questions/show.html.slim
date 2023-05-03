@@ -3,7 +3,7 @@
 
 = render @question
 
-h2 Answers
+h3 Answers
 .answers
   =render @question.answers.sort_by_best
 
@@ -11,7 +11,7 @@ h2 Answers
   = render 'shared/errors', resource: @answer
 
 - if current_user.present?
-h3 New Answer
+h5 New Answer
 = form_with model: [@question, @answer], class: 'new-answer', local: false do |f|
   p
     = f.label :body

@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
+  it_behaves_like 'commented'
+  
   let(:user) { create(:user) }
   let(:question) { create(:question, user_id: user.id) }
   let(:answer) { create(:answer, question_id: question.id, user_id: user.id) }
