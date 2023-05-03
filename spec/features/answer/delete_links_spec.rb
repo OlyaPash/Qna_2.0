@@ -24,6 +24,7 @@ feature 'User can remove links to answer', %{
     end
 
     within '.answers' do
+      visit question_path(question)
       click_on 'Delete link'
 
       expect(page).to_not have_link 'My gist'
