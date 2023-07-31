@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users, controllers: { omniauth_callbacks: 'oauth_callbacks' }
+  devise_for :users, controllers: { omniauth_callbacks: 'oauth_callbacks'}
 
   concern :voted do
     member do
@@ -14,6 +14,10 @@ Rails.application.routes.draw do
       post :comment
     end
   end
+
+  namespace :user do
+    post '/send_email', to: 'send_email#create'
+  end
   
   resources :questions, concerns: %i[voted commented] do
     resources :answers, concerns: %i[voted commented], shallow: true do
@@ -26,6 +30,10 @@ Rails.application.routes.draw do
   resources :attachments, only: :destroy
   resources :links, only: :destroy
   resources :badges, only: :index
+  # resources :authorizations, only: [] do
+  #   get :email_request, on: :member
+  #   get :create_user, on: :member
+  # end
 
   mount ActionCable.server => '/cable'
 end

@@ -10,6 +10,9 @@ class FindForOauthService
     return authorization.user if authorization
 
     email = auth.info[:email]
+
+    return nil if email.nil?
+
     user = User.where(email: email).first
     if user
       user.create_authorization(auth)
