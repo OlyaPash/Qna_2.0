@@ -9,6 +9,8 @@ class AnswersController < ApplicationController
 
   after_action :publish_answer, only: [:create]
 
+  authorize_resource
+
   def index
     @answers = @question.answers
   end
@@ -26,19 +28,15 @@ class AnswersController < ApplicationController
   end
 
   def update
-    if current_user.author?(@answer)
-      @answer.update(answer_params)
-    end
+    @answer.update(answer_params)
   end
 
   def select_best
-    @answer.mark_as_best if current_user.author?(@answer)
+    @answer.mark_as_best
   end
 
   def destroy
-    if current_user.author?(@answer)
-      @answer.destroy
-    end
+    @answer.destroy
   end
 
   private

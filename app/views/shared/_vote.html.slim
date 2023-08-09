@@ -1,6 +1,6 @@
 div id= "#{resource.class.name.downcase}-rating-#{resource.id}" = resource.rating
 
-- if user_signed_in? && !current_user&.author?(resource)
+- if can?(:like, resource)
   .vote
     = link_to 'Like', polymorphic_path(resource, action: :like), method: :patch, data: { type: :json}, remote: true
     '|
