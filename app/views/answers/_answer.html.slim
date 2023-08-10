@@ -14,10 +14,6 @@
           p= link_to file.filename.to_s, url_for(file)
           - if current_user.author?(answer)
             p= link_to "Delete file #{file.filename}", attachment_path(file.id), method: :delete, remote: true
-    
-    h6 Comments:
-
-    = render 'comments/form', commentable: answer
 
     .links
     - if answer.links.present?
@@ -29,12 +25,16 @@
               .gist data-src="#{link.url+ ".json"}"
             else
               li= link_to link.name, link.url
-            - if current_user&.author?(link.linkable)
+            - if can?(:destroy, link)
               p= link_to "Delete link", link_path(link.id), method: :delete, remote: true
-    - if user_signed_in? && current_user&.author?(answer)
-      p= link_to 'Delete answer', answer, remote: true, method: :delete
-      p= link_to 'Edit answer', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
-      p= link_to 'Make answer best', select_best_answer_path(answer), method: :patch, remote: true
+    - if can?(:destroy, answer)
+      td= link_to 'Delete answer', answer, remote: true, method: :delete
+      td |
+    - if can?(:select_best, answer)
+      td= link_to 'Make answer best', select_best_answer_path(answer), method: :patch, remote: true
+      td |
+    - if can?(:update, answer)
+      td= link_to 'Edit answer', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
       p= form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" }, local: false do |f|
         p
           = f.label :body
@@ -51,3 +51,7 @@
             = link_to_add_association 'Add link', f, :links, partial: 'links/link_fields'
         p
           = f.submit 'Save'
+
+    h6 Comments:
+
+    = render 'comments/form', commentable: answer
