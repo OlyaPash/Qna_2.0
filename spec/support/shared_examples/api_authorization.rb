@@ -11,3 +11,11 @@ shared_examples_for 'API Authorizable' do
     end
   end
 end
+
+shared_examples_for 'Returns public fields' do
+  it 'returns all public fields' do
+    attrs.each do |attr|
+      expect(resource_response[attr]).to eq resource.send(attr).as_json
+    end
+  end
+end

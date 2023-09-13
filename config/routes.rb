@@ -30,9 +30,12 @@ Rails.application.routes.draw do
     namespace :v1 do
       resource :profiles, only: [] do
         get :me, on: :collection
+        get :index, on: :collection
       end
 
-      resources :questions, only: [:index]
+      resources :questions, except: [:new, :edit] do
+        resources :answers, except: [:new, :edit], shallow: true
+      end
     end
   end
 
