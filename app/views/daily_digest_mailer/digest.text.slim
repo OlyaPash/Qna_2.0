@@ -1,3 +1,4 @@
-' DailyDigest#digest
-= "\r\n" * 2
-' #{@greeting}, find me in app/views/daily_digest_mailer/digest.text.slim
+' Hi! Daily digest for you!
+' New created questions:
+- @questions.each do |question|
+  = link_to question.title, question_url(question)

@@ -64,5 +64,9 @@ describe Ability do
       it { should be_able_to [:like, :dislike, :cancel], other_answer }
       it { should_not be_able_to [:like, :dislike, :cancel], answer }
     end
+
+    context 'subscriber can' do
+      it { should be_able_to [:create, :destroy], Subscription }
+    end
   end
 end
