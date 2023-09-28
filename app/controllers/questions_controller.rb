@@ -4,6 +4,7 @@ class QuestionsController < ApplicationController
   
   before_action :authenticate_user!, except: %i[index show]
   before_action :load_question, only: %i[show edit update destroy]
+  before_action :find_subscription, only: %i[show update]
 
   after_action :publish_question, only: [:create]
 
@@ -42,7 +43,7 @@ class QuestionsController < ApplicationController
   def update
     @question.user = current_user
 
-      @question.update(question_params)
+    @question.update(question_params)
   end
 
   def destroy
@@ -72,5 +73,9 @@ class QuestionsController < ApplicationController
     params.require(:question).permit(:title, :body, files: [],
                                      links_attributes: [:name, :url, :_destroy, :id],
                                      badge_attributes: [:name, :image])
+  end
+
+  def find_subscription
+    @subscription = @question.subscriptions.find_by(user: current_user)
   end
 end

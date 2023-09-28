@@ -12,7 +12,10 @@
         = image_tag @question.badge.image, size: '70x70' if @question.badge.image.attached?
 
     p= @question.body
+    .subscription
+      td= render 'subscriptions/subscription', resource: @question
     - if @question.files.attached?
+      br
       - @question.files.each do |file|
         div class = "file-#{file.id}"
           p= link_to file.filename.to_s, url_for(file)

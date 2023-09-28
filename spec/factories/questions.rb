@@ -7,5 +7,9 @@ FactoryBot.define do
     trait :invalid do
       title { nil }
     end
+
+    trait :created_at_yesterday do
+      created_at { Date.yesterday }
+    end
   end
 end

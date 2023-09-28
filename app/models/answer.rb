@@ -14,6 +14,12 @@ class Answer < ApplicationRecord
 
   validates :body, presence: true
 
+  after_create :send_notification
+
+  def send_notification
+    NotificationJob.perform_later(self)
+  end
+
   def mark_as_best
     transaction do
 			Answer.where(question_id: question_id).update_all(best: false)
