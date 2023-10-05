@@ -12,7 +12,7 @@
       - answer.files.each do |file|
         div class = "file-#{file.id}"
           p= link_to file.filename.to_s, url_for(file)
-          - if current_user.author?(answer)
+          - if current_user&.author?(answer)
             p= link_to "Delete file #{file.filename}", attachment_path(file.id), method: :delete, remote: true
 
     .links
