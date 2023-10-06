@@ -1,0 +1,20 @@
+- if @result.empty?
+  br
+  h3 No results
+- else
+  br
+  - @result.each do |search|
+    - if search.is_a?(User)
+      p = "#{search.class}: #{search.email}"
+
+    - elsif search.is_a?(Answer)
+      = link_to search.question.title, question_path(search.question)
+      p = "#{search.class}: #{search.body}"
+    
+    - elsif search.is_a?(Comment)
+      = link_to search.commentable.body, question_path(search.commentable)
+      p = "Comment: #{search.body} in #{search.commentable.class}: #{search.commentable.body}"
+
+    - else
+      p = "#{search.class}:"
+      = link_to search.title, question_path(search)

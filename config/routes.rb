@@ -7,6 +7,8 @@ Rails.application.routes.draw do
 
   use_doorkeeper
   devise_for :users, controllers: { omniauth_callbacks: 'oauth_callbacks'}
+  
+  get 'search', to: 'search#search'
 
   concern :voted do
     member do
