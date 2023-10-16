@@ -8,11 +8,11 @@ local:
 
 yandex:
   service: S3
-  access_key_id: <%= ENV.fetch('YANDEX_ACCESS_KEY_ID') %>
-  secret_access_key: <%= ENV.fetch('YANDEX_SECRET_ACCESS_KEY') %>
-  bucket: <%= ENV.fetch('BUCKET') %>
-  region: <%= ENV.fetch('REGION') %>
-  endpoint: <%= ENV.fetch('ENDPOINT') %>
+  access_key_id: <%= Rails.application.credentials[Rails.env.to_sym][:yandex_cloud][:access_key_id] %>
+  secret_access_key: <%= Rails.application.credentials[Rails.env.to_sym][:yandex_cloud][:secret_access_key] %>
+  bucket: <%= Rails.application.credentials[Rails.env.to_sym][:yandex_cloud][:bucket] %>
+  region: <%= Rails.application.credentials[Rails.env.to_sym][:yandex_cloud][:region] %>
+  endpoint: <%= Rails.application.credentials[Rails.env.to_sym][:yandex_cloud][:endpoint] %>
   force_path_style: true
 
 # Remember not to checkin your GCS keyfile to a repository
