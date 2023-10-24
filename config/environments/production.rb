@@ -74,8 +74,8 @@ Rails.application.configure do
     user_name: Rails.application.credentials[Rails.env.to_sym][:yandex][:user_name],
     password: Rails.application.credentials[Rails.env.to_sym][:yandex][:password],
     authentication: 'plain',
-    enable_starttls_auto: true },
-    ssl: true
+    enable_starttls_auto: true,
+    ssl: true }
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
