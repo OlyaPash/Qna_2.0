@@ -50,6 +50,7 @@ gem 'whenever', require: false
 gem 'mysql2', '~> 0.4.10', :platform => :ruby
 gem 'thinking-sphinx'
 gem 'mini_racer'
+gem 'unicorn'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -77,6 +78,7 @@ group :development do
   gem 'capistrano-rvm', require: false
   gem 'capistrano-passenger', require: false
   gem 'capistrano-sidekiq', require: false
+  gem 'capistrano3-unicorn', require: false
 end
 
 group :test do
