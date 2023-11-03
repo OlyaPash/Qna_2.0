@@ -1,32 +1,33 @@
-.question-errors
-  = render 'shared/errors', resource: @question
+- cache @question do
+  .question-errors
+    = render 'shared/errors', resource: @question
 
-= render @question
+  = render @question
 
-h3 Answers
-.answers
-  =render @question.answers.sort_by_best
+  h3 Answers
+  .answers
+    =render @question.answers.sort_by_best
 
-.answer-errors
-  = render 'shared/errors', resource: @answer
+  .answer-errors
+    = render 'shared/errors', resource: @answer
 
-- if current_user.present?
-h5 New Answer
-= form_with model: [@question, @answer], class: 'new-answer', local: false do |f|
-  p
-    = f.label :body
-    = f.text_area :body
-  p
-    = f.label :files
-    = f.file_field :files, multiple: true
-  
-  p Links:
-  p
-    = f.fields_for :links do |l|
-      = render 'links/link_fields', f: l
-    .links
-      = link_to_add_association 'Add link', f, :links, partial: 'links/link_fields'
-  p
-    = f.submit 'Create answer'
+  - if current_user.present?
+  h5 New Answer
+  = form_with model: [@question, @answer], class: 'new-answer', local: false do |f|
+    p
+      = f.label :body
+      = f.text_area :body
+    p
+      = f.label :files
+      = f.file_field :files, multiple: true
+    
+    p Links:
+    p
+      = f.fields_for :links do |l|
+        = render 'links/link_fields', f: l
+      .links
+        = link_to_add_association 'Add link', f, :links, partial: 'links/link_fields'
+    p
+      = f.submit 'Create answer'
 
 p= link_to 'Back', questions_path
