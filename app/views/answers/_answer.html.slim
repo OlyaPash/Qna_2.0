@@ -1,57 +1,58 @@
-- if answer.persisted?
-  div id="answer-#{answer.id}"
-    - if answer.best
-      b Best answer
+- cache answer do
+  - if answer.persisted?
+    div id="answer-#{answer.id}"
+      - if answer.best
+        b Best answer
 
-    p= answer.body
+      p= answer.body
 
-    p Rating:
-    = render 'shared/vote', resource: answer, current_user: current_user
+      p Rating:
+      = render 'shared/vote', resource: answer, current_user: current_user
 
-    - if answer.files.attached?
-      - answer.files.each do |file|
-        div class = "file-#{file.id}"
-          p= link_to file.filename.to_s, url_for(file)
-          - if current_user&.author?(answer)
-            p= link_to "Delete file #{file.filename}", attachment_path(file.id), method: :delete, remote: true
+      - if answer.files.attached?
+        - answer.files.each do |file|
+          div class = "file-#{file.id}"
+            p= link_to file.filename.to_s, url_for(file)
+            - if current_user&.author?(answer)
+              p= link_to "Delete file #{file.filename}", attachment_path(file.id), method: :delete, remote: true
 
-    .links
-    - if answer.links.present?
-      p Links:
-      ul
-        - answer.links.each do |link|
-          div class = "link-#{link.id}"
-            - if link.gist?
-              .gist data-src="#{link.url+ ".json"}"
-            else
-              li= link_to link.name, link.url
-            - if can?(:destroy, link)
-              p= link_to "Delete link", link_path(link.id), method: :delete, remote: true
-    - if can?(:destroy, answer)
-      td= link_to 'Delete answer', answer, remote: true, method: :delete
-      td |
-    - if can?(:select_best, answer)
-      td= link_to 'Make answer best', select_best_answer_path(answer), method: :patch, remote: true
-      td |
-    - if can?(:update, answer)
-      td= link_to 'Edit answer', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
-      p= form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" }, local: false do |f|
-        p
-          = f.label :body
-          = f.text_area :body
-        p
-          = f.label :files
-          = f.file_field :files, multiple: true, direct_upload: true
-          
+      .links
+      - if answer.links.present?
         p Links:
-        p
-          = f.fields_for :links do |l|
-            = render 'links/link_fields', f: l
-          .links
-            = link_to_add_association 'Add link', f, :links, partial: 'links/link_fields'
-        p
-          = f.submit 'Save'
+        ul
+          - answer.links.each do |link|
+            div class = "link-#{link.id}"
+              - if link.gist?
+                .gist data-src="#{link.url+ ".json"}"
+              else
+                li= link_to link.name, link.url
+              - if can?(:destroy, link)
+                p= link_to "Delete link", link_path(link.id), method: :delete, remote: true
+      - if can?(:destroy, answer)
+        td= link_to 'Delete answer', answer, remote: true, method: :delete
+        td |
+      - if can?(:select_best, answer)
+        td= link_to 'Make answer best', select_best_answer_path(answer), method: :patch, remote: true
+        td |
+      - if can?(:update, answer)
+        td= link_to 'Edit answer', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
+        p= form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" }, local: false do |f|
+          p
+            = f.label :body
+            = f.text_area :body
+          p
+            = f.label :files
+            = f.file_field :files, multiple: true, direct_upload: true
+            
+          p Links:
+          p
+            = f.fields_for :links do |l|
+              = render 'links/link_fields', f: l
+            .links
+              = link_to_add_association 'Add link', f, :links, partial: 'links/link_fields'
+          p
+            = f.submit 'Save'
 
-    h6 Comments:
+      h6 Comments:
 
-    = render 'comments/form', commentable: answer
+      = render 'comments/form', commentable: answer
